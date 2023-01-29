@@ -1,0 +1,9 @@
+What it has:
+	- ImportService
+	- MigrationService
+	- ExportService
+	- ModifierService with 1 Modifier (ChangeVolume)
+	- HistoryService
+What it does not have:
+	- Error handling for nothing, you could brake the program in runtime
+	if you give bad commands, or bad series of commands
