@@ -26,10 +26,15 @@ public class CanvasHistoryClient implements Client {
     @Override
     public void runClient(ResponsesSignals responsesSignals) {
         if (!responsesSignals.getUndoSignal()) {
-            logger(4, "skipping runClient() of HistoryService");
+            //logger(4, "skipping runClient() of HistoryService");
             return;
         }
         logger(4, "runClient() of HistoryService");
-        canvas.restoreState(canvasHistory.popFromList());
+        try {
+            canvas.restoreState(canvasHistory.popFromList());
+        }
+        catch(Exception e) {
+            logger(2, e.getMessage());
+        }
     }
 }

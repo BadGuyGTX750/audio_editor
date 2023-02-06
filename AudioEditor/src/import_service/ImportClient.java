@@ -31,7 +31,7 @@ public class ImportClient implements Client {
     @Override
     public void runClient(ResponsesSignals responsesSignals) {
         if (!responsesSignals.getImportSignal()) {
-            logger(4, "skipping runClient() of ImportService");
+            //logger(4, "skipping runClient() of ImportService");
             return;
         }
         logger(4, "runClient() of ImportService");

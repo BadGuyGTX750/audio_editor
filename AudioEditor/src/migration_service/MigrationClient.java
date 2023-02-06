@@ -35,28 +35,37 @@ public class MigrationClient implements Client {
     @Override
     public void runClient(ResponsesSignals responsesSignals) {
         if (!responsesSignals.getMigrate2CanvasSignal() && !responsesSignals.getMigrateFromCanvasSignal()) {
-            logger(4, "skipping runClient() of MigrationService");
+            //logger(4, "skipping runClient() of MigrationService");
             return;
         }
         logger(4, "runClient() of MigrationService");
         if (responsesSignals.getMigrate2CanvasSignal()) {
-            byte[] file = importFileContainer.getFileContainer();
-            canvas.setFileHeaderAndFileData(file);
-            importFileContainer.clearFileContainer();
-            //canvas.showFileData();
+            try {
+                byte[] file = importFileContainer.getFileContainer();
+                canvas.setFileHeaderAndFileData(file);
+                importFileContainer.clearFileContainer();
+                //canvas.showFileData();
+            } catch(Exception e) {
+                logger(2, e.getMessage());
+            }
+
         }
         if (responsesSignals.getMigrateFromCanvasSignal()) {
-            byte[] fileHeader = canvas.getFileHeader();
-            byte[] fileData = canvas.getFileData();
-            byte[] file = new byte[fileHeader.length + fileData.length];
-            for (int i = 0; i < fileHeader.length; i++) {
-                file[i] = fileHeader[i];
+            try {
+                byte[] fileHeader = canvas.getFileHeader();
+                byte[] fileData = canvas.getFileData();
+                byte[] file = new byte[fileHeader.length + fileData.length];
+                for (int i = 0; i < fileHeader.length; i++) {
+                    file[i] = fileHeader[i];
+                }
+                for (int i = 44; i < fileHeader.length + fileData.length; i++) {
+                    file[i] = fileData[i-fileHeader.length];
+                }
+                exportFileContainer.setFileContainer(file);
+                //exportFileContainer.showFileContainer();
+            } catch(Exception e) {
+                logger(2, e.getMessage());
             }
-            for (int i = 44; i < fileHeader.length + fileData.length; i++) {
-                file[i] = fileData[i-fileHeader.length];
-            }
-            exportFileContainer.setFileContainer(file);
-            //exportFileContainer.showFileContainer();
         }
     }
 }

@@ -33,7 +33,7 @@ public class ModifierClient implements Client {
     @Override
     public void runClient(ResponsesSignals responsesSignals) {
         if (!responsesSignals.getModifierSignal()) {
-            logger(4, "skipping runClient() of ModifierService");
+            //logger(4, "skipping runClient() of ModifierService");
             return;
         }
         logger(4, "runClient() of ModifierService");
@@ -49,12 +49,17 @@ public class ModifierClient implements Client {
         // get the extraction points (number of the sample from-to)
         // from the next 2 arguments of the command
         // and get the clip
-        int s1 = Integer.parseInt(command.split(" ")[1]);
-        int s2 = Integer.parseInt(command.split(" ")[2]);
-        byte[] file = canvas.clipFromTo(s1, s2);
+        try {
+            int s1 = Integer.parseInt(command.split(" ")[1]);
+            int s2 = Integer.parseInt(command.split(" ")[2]);
+            byte[] file = canvas.clipFromTo(s1, s2);
 
-        // execute the modifier and stich back the resulting insertion
-        byte[] insertion = modifierHashMap.get(modifier).executeModifier(command, file);
-        canvas.stitchBack(insertion);
+            // execute the modifier and stich back the resulting insertion
+            byte[] insertion = modifierHashMap.get(modifier).executeModifier(command, file);
+            canvas.stitchBack(insertion);
+        } catch(Exception e) {
+            logger(2, e.getMessage());
+        }
+
     }
 }

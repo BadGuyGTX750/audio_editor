@@ -67,6 +67,19 @@ public class Canvas {
     }
     public byte[] clipFromTo(int s1, int s2) {
         int clipLength = fileData.length;
+
+        // check if the clip cutting conditions are met
+        if (s1 < 0) {
+            throw new IllegalArgumentException("Sample from which to clip cannot be lower than 0");
+        }
+        if (s2 > clipLength) {
+            throw new IllegalArgumentException(String.format("Sample from which to end the clip cannot be higher than %d", clipLength));
+        }
+        if (s2 < s1) {
+            throw new IllegalArgumentException("Second argument cannot be smaller than the first argument");
+        }
+
+        //allocate memory in the heap for the clips
         startClip = new byte[s1];
         middleClip = new byte[s2-s1];
         finalClip = new byte[clipLength-s2];
@@ -85,7 +98,6 @@ public class Canvas {
         return middleClip;
     }
     public void stitchBack(byte[] insertion) {
-        // TODO: modify the limits for each for
         int s1 = startClip.length;
         int s2 = s1 + insertion.length;
         int s3 = s2 + finalClip.length;
@@ -99,7 +111,6 @@ public class Canvas {
         for (int i = s2; i < s3; i++) {
             fileData[i] = finalClip[i - s2];
         }
-        logger(4, "Clip: " + fileData.length);
     }
     private void clearCanvas() {
         fileHeader = null;

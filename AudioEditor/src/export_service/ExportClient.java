@@ -29,7 +29,7 @@ public class ExportClient implements Client {
     @Override
     public void runClient(ResponsesSignals responsesSignals) {
         if (!responsesSignals.getExportSignal()) {
-            logger(4, "skipping runClient() of ExportService");
+            //logger(4, "skipping runClient() of ExportService");
             return;
         }
         logger(4, "runClient() of ExportService");

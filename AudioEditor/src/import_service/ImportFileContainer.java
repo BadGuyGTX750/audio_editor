@@ -33,9 +33,9 @@ public class ImportFileContainer {
             if (b_hex.length() == 1)
                 b_hex = "0" + b_hex;
             if (charsOnALine > 1)
-                System.out.print(b_hex + " ");
+                System.out.print(b + " ");
             else {
-                System.out.print(b_hex + " ");
+                System.out.print(b + " ");
                 System.out.println();
                 charsOnALine = 44;
                 continue;
