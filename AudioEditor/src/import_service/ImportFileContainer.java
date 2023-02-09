@@ -1,5 +1,7 @@
 package import_service;
 
+import dependency_injection.Injectable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,14 +9,9 @@ import static utility.Logger.logger;
 
 public class ImportFileContainer {
     private byte[] fileContainer;
-    private static ImportFileContainer importFileContainerImplementation;
-    private ImportFileContainer() {
+    @Injectable
+    public ImportFileContainer() {
         logger(4, "ImportFileContainer is being initialized");
-    }
-    public static ImportFileContainer getImportFileContainer() {
-        if (importFileContainerImplementation == null)
-            importFileContainerImplementation = new ImportFileContainer();
-        return importFileContainerImplementation;
     }
     public byte[] getFileContainer() {
         return fileContainer;

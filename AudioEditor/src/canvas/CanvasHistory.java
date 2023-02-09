@@ -1,17 +1,21 @@
 package canvas;
 
+import dependency_injection.Injectable;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static utility.Logger.logger;
+
 public class CanvasHistory {
-    private static CanvasHistory canvasHistoryImplementation;
     private List<CanvasState> canvasStates = new ArrayList<>();
     private int undoMax = 10;
-    public static CanvasHistory getCanvasHistory() {
-        if (canvasHistoryImplementation == null)
-            canvasHistoryImplementation = new CanvasHistory();
-        return canvasHistoryImplementation;
+
+    @Injectable
+    public CanvasHistory() {
+        logger(4, "CanvasHistory is being initialized");
     }
+
     public void pushToList(CanvasState canvasState) {
         if (canvasStates.size() > undoMax) {
             canvasStates.add(canvasState);

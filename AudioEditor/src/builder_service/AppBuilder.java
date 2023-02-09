@@ -1,29 +1,31 @@
 package builder_service;
 
+import canvas.Canvas;
+import canvas.CanvasHistory;
+import canvas.CanvasHistoryClient;
+import canvas.CanvasState;
+import command_service.CommandInterpreter;
 import command_service.CommandLineClient;
+import dependency_injection.DependencyContainer;
+import dependency_injection.DependencyResolver;
+import export_service.ExportClient;
+import export_service.ExportFileContainer;
+import export_service.ExportFileWriter;
+import import_service.ImportClient;
+import import_service.ImportFileContainer;
+import import_service.ImportFileReader;
+import migration_service.MigrationClient;
+import modifier_service.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static builder_service.CommandServiceBuilder.getCommandServiceBuilder;
-import static builder_service.ExportServiceBuilder.getExportServiceBuilder;
-import static builder_service.HistoryServiceBuilder.getHistoryServiceBuilder;
-import static builder_service.ImportServiceBuilder.getImportServiceBuilder;
-import static builder_service.MigrationServiceBuilder.getMigrationServiceBuilder;
-import static builder_service.ModifierServiceBuilder.getModifierServiceBuilder;
-import static canvas.CanvasHistoryClient.getCanvasHistoryClient;
-import static command_service.CommandLineClient.getCommandLineClient;
-import static export_service.ExportClient.getExportClient;
-import static import_service.ImportClient.getImportClient;
-import static migration_service.MigrationClient.getMigrationClient;
-import static modifier_service.ModifierClient.getModifierClient;
 import static utility.Logger.logger;
+import static utility.Logger.printAllLogs;
 
 public final class AppBuilder {
     private static AppBuilder appBuilderImplementation;
-    private List<Builder> builderList = new ArrayList<>();
     private CommandLineClient commandClient;
     private ClientContainer clientContainer;
+    private DependencyContainer dependencyContainer;
+    private DependencyResolver dependencyResolver;
     public static AppBuilder getAppBuilder() {
         if (appBuilderImplementation == null)
             appBuilderImplementation = new AppBuilder();
@@ -31,35 +33,55 @@ public final class AppBuilder {
     }
     private AppBuilder() {
         logger(4, "AppBuilder is being initialized");
-        // add Builder which resolve dependencies for each service
-        addBuilder(getCommandServiceBuilder());
-        addBuilder(getImportServiceBuilder());
-        addBuilder(getMigrationServiceBuilder());
-        addBuilder(getExportServiceBuilder());
-        addBuilder(getModifierServiceBuilder());
-        addBuilder(getHistoryServiceBuilder());
+        dependencyContainer = new DependencyContainer();
+        // Add all dependencies
+        // CommandLineClient dependencies
+        dependencyContainer.add(CommandLineClient.class, true);
+        dependencyContainer.add(CommandInterpreter.class, true);
+        // ImportClient dependencies
+        dependencyContainer.add(ImportClient.class, true);
+        dependencyContainer.add(ImportFileContainer.class, true);
+        dependencyContainer.add(ImportFileReader.class, true);
+        // MigrationClient dependencies
+        dependencyContainer.add(MigrationClient.class, true);
+        // ExportClient dependencies
+        dependencyContainer.add(ExportClient.class, true);
+        dependencyContainer.add(ExportFileContainer.class, true);
+        dependencyContainer.add(ExportFileWriter.class, true);
+        // ModifierClient dependencies
+        dependencyContainer.add(ModifierClient.class, true);
+        dependencyContainer.add(ModifierContainer.class, true);
+        dependencyContainer.add(ChangeVolume.class, true);
+        dependencyContainer.add(FadeIn.class, true);
+        dependencyContainer.add(FadeOut.class, true);
+        dependencyContainer.add(Delete.class, true);
+        // CanvasHistoryClient dependencies
+        dependencyContainer.add(Canvas.class, true);
+        dependencyContainer.add(CanvasHistoryClient.class, true);
+        dependencyContainer.add(CanvasHistory.class, true);
+        dependencyContainer.add(CanvasState.class, true);
+        // CommandLineClient dependencies
+        dependencyContainer.add(CommandLineClient.class, true);
+        dependencyContainer.add(CommandInterpreter.class, true);
+        // Instantiate resolver with the dependency container
+        dependencyResolver = new DependencyResolver(dependencyContainer);
     }
     public void mainBuild() {
-        for (Builder builder : builderList) {
-            builder.build();
-        }
-        // add clients to ClientContainer to deliver it to CommandLineClient
+        // Add clients to ClientContainer to deliver it to CommandLineClient
         // in order to run every Client runClient
         clientContainer = new ClientContainer();
-        clientContainer.addClient(getImportClient());
-        clientContainer.addClient(getMigrationClient());
-        clientContainer.addClient(getExportClient());
-        clientContainer.addClient(getModifierClient());
-        clientContainer.addClient(getCanvasHistoryClient());
-
-        // run the command client to give commands to the app
-        commandClient = getCommandLineClient();
-        commandClient.runCommandLineClient(clientContainer);
-    }
-    public void addBuilder(Builder builder) {
-        builderList.add(builder);
-    }
-    public void removeBuilder(Builder builder) {
-        builderList.remove(builder);
+        try {
+            clientContainer.addClient((ImportClient)dependencyResolver.getService(ImportClient.class));
+            clientContainer.addClient((MigrationClient)dependencyResolver.getService(MigrationClient.class));
+            clientContainer.addClient((ExportClient)dependencyResolver.getService(ExportClient.class));
+            clientContainer.addClient((ModifierClient)dependencyResolver.getService(ModifierClient.class));
+            clientContainer.addClient((CanvasHistoryClient)dependencyResolver.getService(CanvasHistoryClient.class));
+            // Run the command client to give commands to the app
+            commandClient = (CommandLineClient)dependencyResolver.getService(CommandLineClient.class);
+            commandClient.runCommandLineClient(clientContainer);
+        } catch(Exception e) {
+            logger(2, e.getMessage());
+            printAllLogs();
+        }
     }
 }

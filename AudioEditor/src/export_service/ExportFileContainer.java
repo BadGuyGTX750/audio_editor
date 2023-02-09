@@ -1,17 +1,14 @@
 package export_service;
 
+import dependency_injection.Injectable;
+
 import static utility.Logger.logger;
 
 public class ExportFileContainer {
     private byte[] fileContainer;
-    private static ExportFileContainer exportFileContainerImplementation;
-    private ExportFileContainer() {
+    @Injectable
+    public ExportFileContainer() {
         logger(4, "ExportFileContainer is being initialized");
-    }
-    public static ExportFileContainer getExportFileContainer() {
-        if (exportFileContainerImplementation == null)
-            exportFileContainerImplementation = new ExportFileContainer();
-        return exportFileContainerImplementation;
     }
     public void setFileContainer(byte[] file) {
         fileContainer = file;

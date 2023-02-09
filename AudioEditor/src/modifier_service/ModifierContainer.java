@@ -1,11 +1,14 @@
 package modifier_service;
 
+import dependency_injection.Injectable;
+
 import java.util.HashMap;
 
 import static utility.Logger.logger;
 
 public class ModifierContainer {
     private HashMap<String, Modifier> modifierHashMap = new HashMap<>();
+    @Injectable
     public ModifierContainer() {
         logger(4, "ModifierContainer is being initialized");
         modifierHashMap.put("chgvol", new ChangeVolume());

@@ -2,27 +2,16 @@ package import_service;
 
 import builder_service.Client;
 import command_service.ResponsesSignals;
+import dependency_injection.Inject;
 
 import static utility.Logger.logger;
 
 public class ImportClient implements Client {
-    private static ImportClient importClientImplementation;
     private ImportFileContainer importFileContainer;
     private ImportFileReader importFileReader;
 
-    public static ImportClient getImportClient() {
-        if (importClientImplementation != null)
-            return importClientImplementation;
-        return null;
-    }
-
-    public static ImportClient getImportClient(ImportFileContainer importFileContainer,
-                                               ImportFileReader importFileReader) {
-        if (importClientImplementation == null)
-            importClientImplementation = new ImportClient(importFileContainer, importFileReader);
-        return importClientImplementation;
-    }
-    private ImportClient(ImportFileContainer importFileContainer,
+    @Inject
+    public ImportClient(ImportFileContainer importFileContainer,
                          ImportFileReader importFileReader) {
         logger(4, "ImportClient is being initialized");
         this.importFileContainer = importFileContainer;

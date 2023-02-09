@@ -3,33 +3,23 @@ package migration_service;
 import builder_service.Client;
 import canvas.Canvas;
 import command_service.ResponsesSignals;
+import dependency_injection.Inject;
 import export_service.ExportFileContainer;
 import import_service.ImportFileContainer;
 
 import static utility.Logger.logger;
 
 public class MigrationClient implements Client {
-    private static MigrationClient migrationClientImplementation;
     private ImportFileContainer importFileContainer;
     private ExportFileContainer exportFileContainer;
     private Canvas canvas;
-
-    private MigrationClient(ImportFileContainer importFileContainer,
+    @Inject
+    public MigrationClient(ImportFileContainer importFileContainer,
                             ExportFileContainer exportFileContainer, Canvas canvas) {
         logger(4, "MigrationClient is being initialized");
         this.importFileContainer = importFileContainer;
         this.exportFileContainer = exportFileContainer;
         this.canvas = canvas;
-    }
-    public static MigrationClient getMigrationClient() {
-        return migrationClientImplementation;
-    }
-    public static MigrationClient getMigrationClient(ImportFileContainer importFileContainer,
-                                                     ExportFileContainer exportFileContainer,
-                                                     Canvas canvas) {
-        if (migrationClientImplementation == null)
-            migrationClientImplementation = new MigrationClient(importFileContainer, exportFileContainer, canvas);
-        return migrationClientImplementation;
     }
 
     @Override

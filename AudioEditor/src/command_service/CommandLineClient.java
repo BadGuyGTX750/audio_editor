@@ -2,6 +2,7 @@ package command_service;
 
 import builder_service.Client;
 import builder_service.ClientContainer;
+import dependency_injection.Inject;
 
 import java.util.List;
 import java.util.Scanner;
@@ -14,19 +15,10 @@ public class CommandLineClient {
     private String command = "";
     private String response = "No response";
     private boolean terminationSignal = false;
-    private static CommandLineClient commandLineClientImplementation;
 
+    @Inject
     public CommandLineClient(CommandInterpreter commandInterpreter) {
         this.commandInterpreter = commandInterpreter;
-    }
-
-    public static CommandLineClient getCommandLineClient() {
-        return commandLineClientImplementation;
-    }
-    public static CommandLineClient getCommandLineClient(CommandInterpreter commandInterpreter) {
-        if (commandLineClientImplementation == null)
-            commandLineClientImplementation = new CommandLineClient(commandInterpreter);
-        return commandLineClientImplementation;
     }
 
     public void runCommandLineClient(ClientContainer clientContainer) {

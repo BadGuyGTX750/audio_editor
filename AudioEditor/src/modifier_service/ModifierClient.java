@@ -4,30 +4,22 @@ import builder_service.Client;
 import canvas.Canvas;
 import canvas.CanvasHistory;
 import command_service.ResponsesSignals;
+import dependency_injection.Inject;
 
 import java.util.HashMap;
 
 import static utility.Logger.logger;
 
 public class ModifierClient implements Client {
-    private static ModifierClient modifierClientImplementiation;
     private Canvas canvas;
     private ModifierContainer modifierContainer;
     private CanvasHistory canvasHistory;
-
-    private ModifierClient(Canvas canvas, ModifierContainer modifierContainer, CanvasHistory canvasHistory) {
+    @Inject
+    public ModifierClient(Canvas canvas, ModifierContainer modifierContainer, CanvasHistory canvasHistory) {
         logger(4, "ModifierClient is being initialized");
         this.canvas = canvas;
         this.modifierContainer = modifierContainer;
         this.canvasHistory = canvasHistory;
-    }
-    public static ModifierClient getModifierClient() {
-        return modifierClientImplementiation;
-    }
-    public static ModifierClient getModifierClient(Canvas canvas, ModifierContainer modifierContainer, CanvasHistory canvasHistory) {
-        if (modifierClientImplementiation == null)
-            modifierClientImplementiation = new ModifierClient(canvas, modifierContainer, canvasHistory);
-        return modifierClientImplementiation;
     }
 
     @Override

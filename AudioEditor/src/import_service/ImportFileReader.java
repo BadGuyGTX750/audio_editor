@@ -1,5 +1,7 @@
 package import_service;
 
+import dependency_injection.Injectable;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,6 +10,7 @@ import java.nio.file.Paths;
 import static utility.Logger.logger;
 
 public class ImportFileReader {
+    @Injectable
     public ImportFileReader() {
         logger(4, "ImportFileReader is being initialized");
     }

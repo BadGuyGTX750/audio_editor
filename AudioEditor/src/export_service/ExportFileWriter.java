@@ -1,5 +1,7 @@
 package export_service;
 
+import dependency_injection.Injectable;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,6 +10,7 @@ import static utility.Logger.logger;
 
 public class ExportFileWriter {
     private static String secretSeparator = "  %%#% # %#%%  ";
+    @Injectable
     public ExportFileWriter() {
         logger(4, "ExportFileWriter is being initialized");
     }

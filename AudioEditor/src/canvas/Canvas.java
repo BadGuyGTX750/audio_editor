@@ -1,26 +1,20 @@
 package canvas;
 
-import java.util.ArrayList;
-import java.util.List;
+import dependency_injection.Injectable;
 
-import static canvas.CanvasHistory.getCanvasHistory;
 import static utility.Logger.logger;
 
 public class Canvas {
-    private static Canvas canvasImplementation;
     private byte[] fileHeader;
     private byte[] fileData;
     private byte[] startClip;
     private byte[] middleClip;
     private byte[] finalClip;
-    private Canvas() {
+    @Injectable
+    public Canvas() {
         logger(4, "Canvas is being initialized");
     }
-    public static Canvas getCanvas() {
-        if (canvasImplementation == null)
-            canvasImplementation = new Canvas();
-        return canvasImplementation;
-    }
+
     public void setFileHeaderAndFileData(byte[] file) {
         fileHeader = new byte[44];
         for (int i = 0; i < 44; i++) {

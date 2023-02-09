@@ -1,5 +1,7 @@
 package command_service;
 
+import dependency_injection.Injectable;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.regex.Matcher;
@@ -36,6 +38,7 @@ public class CommandInterpreter {
     private static String UNDO_REGEX = "undo";
     private static String MG_IMPORT_REGEX = "((?i)(import -mg ))((?i)([A-Z]:(((\\\\)([a-zA-Z0-9_ ]+))+)\\.wav))";
     private static String MG_EXPORT_REGEX = "((?i)(export -mg ))((?i)([A-Z]:(((\\\\)([a-zA-Z0-9_ ]+))+)\\.wav))|(([a-zA-Z0-9_ ]+)\\.wav)";
+    @Injectable
     public CommandInterpreter() {
         logger(4, "ComandInterpreter is being initialized");
     }

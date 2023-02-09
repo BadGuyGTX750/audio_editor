@@ -2,25 +2,17 @@ package export_service;
 
 import builder_service.Client;
 import command_service.ResponsesSignals;
+import dependency_injection.Inject;
 
 import java.io.IOException;
 
 import static utility.Logger.logger;
 
 public class ExportClient implements Client {
-    private static ExportClient exportClientImplementation;
     private ExportFileContainer exportFileContainer;
     private ExportFileWriter exportFileWriter;
-
-    public static ExportClient getExportClient() {
-        return exportClientImplementation;
-    }
-    public static ExportClient getExportClient(ExportFileContainer exportFileContainer, ExportFileWriter exportFileWriter) {
-        if (exportClientImplementation == null)
-            exportClientImplementation = new ExportClient(exportFileContainer, exportFileWriter);
-        return exportClientImplementation;
-    }
-    private ExportClient(ExportFileContainer exportFileContainer, ExportFileWriter exportFileWriter) {
+    @Inject
+    public ExportClient(ExportFileContainer exportFileContainer, ExportFileWriter exportFileWriter) {
         logger(4, "ExportClient is being initialized");
         this.exportFileContainer = exportFileContainer;
         this.exportFileWriter = exportFileWriter;
