@@ -16,3 +16,7 @@ New Features:
 	- Error handling for most exceptions
 What it does not have:
 	- Dependency injection to make integrating new services much easier
+
+Update3:
+New Features:
+	- Dependency injection so it's much easier to wire in new services
