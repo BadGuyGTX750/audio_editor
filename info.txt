@@ -1,3 +1,4 @@
+Update 1:
 What it has:
 	- ImportService
 	- MigrationService
@@ -7,3 +8,11 @@ What it has:
 What it does not have:
 	- Error handling for nothing, you could brake the program in runtime
 	if you give bad commands, or bad series of commands
+	
+
+Update2:
+New Features: 
+	- FadeIn, FadeOut, Delete filters in addition to ChangeVolume
+	- Error handling for most exceptions
+What it does not have:
+	- Dependency injection to make integrating new services much easier
